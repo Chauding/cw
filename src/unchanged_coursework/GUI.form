@@ -183,6 +183,13 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textFieldGameName">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textFieldGameNameActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="buttonStartGame">
           <Properties>
@@ -201,6 +208,7 @@
               <Color blue="66" green="66" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Stop Game"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonStopGameActionPerformed"/>
@@ -212,6 +220,7 @@
               <Color blue="ff" green="33" red="33" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Process Results"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonProcessResultsActionPerformed"/>
@@ -270,12 +279,15 @@
         </Component>
         <Component class="javax.swing.JTextField" name="textFieldTime">
           <Properties>
-            <Property name="text" type="java.lang.String" value="12:07:23"/>
+            <Property name="text" type="java.lang.String" value="00:00"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textFieldGameRunningTime">
           <Properties>
-            <Property name="text" type="java.lang.String" value="03:45"/>
+            <Property name="text" type="java.lang.String" value="00:00"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -444,6 +456,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textFieldNumberViewers">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

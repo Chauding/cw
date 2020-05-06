@@ -1,6 +1,7 @@
 package unchanged_coursework;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Player object stores player name, number of active viewers, 
@@ -18,6 +19,7 @@ public class Player{
     
     private HashMap<Viewer, Double> donationsFromViewers; /* record of donations */
    
+    // volitle
     private static long allTime;    /* class-level running total of all viewing times */
 
     /* Player constructor */
@@ -25,10 +27,12 @@ public class Player{
         this.playerName = name;
         this.numViewers = 0;
         donationsFromViewers = new HashMap();
-        sumOfDonations = 0;
+        sumOfDonations = 0.0;
     }
     
-    /* methods for updating and accessing number of current viewers */
+    /**
+     * atomic
+     * methods for updating and accessing number of current viewers */
     public void gainOneViewer(){
         numViewers++;
     }
@@ -37,7 +41,7 @@ public class Player{
     }
     // number of viwers watching this player
     public int getNumViewers() {
-        return numViewers;
+        return numViewers++;
     }
         
     /* method for processing donation from a Viewer into Player records */
@@ -45,17 +49,20 @@ public class Player{
         this.numOfDonations++;
         this.sumOfDonations += donation.getAmount();
         Viewer donor = donation.getViewer();
+        // lock
         if(donationsFromViewers.containsKey(donor)){
             donationsFromViewers.replace(donor, donationsFromViewers.get(donor) + donation.getAmount());
         }
         else{
             donationsFromViewers.put(donor, donation.getAmount());
         }
+        // unlock
     }
     
     /* method to get total of all donations in Players record of donations */
     public double sumDonations(){
         int sum = 0;
+        // try lock
         for(Double v: donationsFromViewers.values()){
             sum += v;
         }
@@ -73,15 +80,21 @@ public class Player{
     
     /* method to return reference to HashMap of donation records made to this Player */
     public HashMap<Viewer, Double> getDonationsFromViewers() {
-        return donationsFromViewers;
+      // try lock
+
+      return donationsFromViewers;
     }
 
-    /* methods to access running totals of number and values of donations */
+    /**
+     * called from GUI
+     * methods to access running totals of number and values of donations */
     public int getNumOfDonations() {
-        return numOfDonations;
+      // try lock 
+      return numOfDonations;
     }
     public Double getSumOfDonations() {
-        return sumOfDonations;
+      // try lock  this is called from GUI
+      return sumOfDonations;
     }
     
     // class-level methods to access and increase grand total of all viewing time  for all Players */

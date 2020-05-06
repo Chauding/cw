@@ -2,6 +2,8 @@ package unchanged_coursework;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Viewer class extends Thread to run in parallel to Game
@@ -17,7 +19,7 @@ public class Viewer extends Thread{
     private long startedViewingPlayer;  // stores nanosecond level start of viewing time of current Player 
     
     private Random random;
-    private int numberActions;          // number of switches between Players that Viewer can make
+    private int numberActions;          // number of switches between Players that Viewer can make (make this volital)
     private int intervalBetweenActions; // time in milliseconds between switches
     
     /* class-level data tracking totals for all Viewers */
@@ -28,6 +30,11 @@ public class Viewer extends Thread{
      * this is a volatile static ArrayList: Keeps the number of donation made by viewer
      */
     private volatile static ArrayList<Donation> donationsMade = new ArrayList();
+    
+    /***
+     * Monitor variables
+     */
+    ReentrantLock lock = new ReentrantLock();
     
     /* Viewer constructor */
     public Viewer(String id, Game f, int actions, int interval){
@@ -76,32 +83,38 @@ public class Viewer extends Thread{
          * bits that are being written mutually exclusive
          * lock here:
          */
+        lock.lock();
         this.game.processDonation(donation);
         /// This should then update the GUI.
         Viewer.donationsMade.add(donation);
         // unlcok here
+        lock.unlock();
     }
     
     /**
-     * I would synchronise this method
+     * 
      * Method used to switch between Players */
     public void switchPlayer(Player newPlayerToWatch){
         if(viewedPlayer != null){ /* will be null when Viewer first starts */
             long timeViewed = System.nanoTime() - startedViewingPlayer;
             // Lock here
+            lock.lock();
             game.recordViewingTime(viewedPlayer, timeViewed);
             Viewer.totalViewingTimeRecordedByViewers += timeViewed;
             this.viewedPlayer.loseOneViewer();
             Player.addToAllTime(timeViewed);
             // unlock
+            lock.unlock();
         }        
         this.viewedPlayer = newPlayerToWatch;
         if(viewedPlayer != null){ /* will be null here if Viewer is finished viewing */
           // calling player class 
           // lock
+          lock.lock();
           this.viewedPlayer.gainOneViewer();
           this.startedViewingPlayer = System.nanoTime();
           // unlock
+          lock.unlock();
         }
     }
     
