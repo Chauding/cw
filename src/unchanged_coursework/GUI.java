@@ -609,21 +609,33 @@ public class GUI extends javax.swing.JFrame {
                 // quit the loop
                 inputValid = true;
                 gameName = result;
+                startGame();
               }
             };
           }
       });
+//      boolean inputValid = false;
+//      while (!inputValid) {
+//        String result = JOptionPane.showInputDialog(null, "Enter the name of the game", null);
+//        if (!result.isEmpty()) {
+//          // quit the loop
+//          inputValid = true;
+//          gameName = result;
+//        }
+//      };
+    }//GEN-LAST:event_buttonStartGameActionPerformed
+
+    public void startGame () {
       this.textFieldGameName.setText(gameName);
-      this.game = new Game(this, gameName);
+      this.game = new Game(this, this.gameName);
       this.jComboBox1.setModel(new DefaultComboBoxModel(game.getPlayersNames().toArray()));
       game.startGame();
       startTime = LocalTime.now(); // This remembers when the application started
       this.startGameButtonFunctions(); // This enables all the buttons and disabled the start button
       this.startGameTimer();
       fillTableOnEDT();
-      
-    }//GEN-LAST:event_buttonStartGameActionPerformed
-
+    }
+    
     private void buttonStopGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStopGameActionPerformed
       game.stopGame();
       theStopWatchTimer.stop(); // Stops the Game timer
